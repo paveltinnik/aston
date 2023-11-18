@@ -1,6 +1,7 @@
 package com.example.aston.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
@@ -13,10 +14,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private val contacts = mutableListOf<Contact>()
     private lateinit var contactListAdapter: ContactListAdapter
 
-    private var shopItemContainer: FragmentContainerView? = null
+    private var screenMode = CreateContactActivity.MODE_UNKNOWN
+    private var shopItemId: Int = Contact.UNDEFINED_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
+        
         buttonAddItem.setOnClickListener {
             val intent = CreateContactActivity.newIntentAddItem(this)
             startActivity(intent)
@@ -96,7 +98,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
 
 // Расширение для MutableList для обмена элементов
 fun <T> MutableList<T>.swap(from: Int, to: Int) {

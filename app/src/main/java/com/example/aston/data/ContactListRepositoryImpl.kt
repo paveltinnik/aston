@@ -16,7 +16,7 @@ object ContactListRepositoryImpl : ContactListRepository {
     init {
         val faker = Faker()
         
-        for (i in 0 until 100) {
+        for (i in 0 until 5) {
             val firstName = faker.name.firstName()
             val lastName = faker.name.lastName()
             val phoneNumber = faker.phoneNumber.phoneNumber()
