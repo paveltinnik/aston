@@ -1,7 +1,10 @@
 package com.example.aston.presentation
 
+import android.opengl.Visibility
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -14,6 +17,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var contactListAdapter: ContactListAdapter
+
+    private lateinit var buttonAdd: FloatingActionButton
+    private lateinit var buttonChooseDelete: ImageButton
+    private lateinit var buttonDelete: Button
+    private lateinit var buttonCancel: Button
 
     private var screenMode = CreateContactActivity.MODE_UNKNOWN
     private var shopItemId: Int = Contact.UNDEFINED_ID
@@ -30,14 +38,28 @@ class MainActivity : AppCompatActivity() {
             contactListAdapter.submitList(it)
         }
 
-        val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_contact)
-        val buttonDelete = findViewById<Button>(R.id.button_delete)
-        val buttonCancel = findViewById<Button>(R.id.button_cancel)
+        buttonAdd = findViewById(R.id.button_add_contact)
+        buttonChooseDelete = findViewById(R.id.button_choose_delete)
+        buttonDelete = findViewById(R.id.button_delete)
+        buttonCancel = findViewById(R.id.button_cancel)
 
-        buttonAddItem.setOnClickListener {
+        buttonAdd.setOnClickListener {
             val intent = CreateContactActivity.newIntentAddItem(this)
             startActivity(intent)
         }
+
+        buttonChooseDelete.setOnClickListener {
+            buttonAdd.visibility = View.GONE
+            buttonCancel.visibility = View.VISIBLE
+            buttonDelete.visibility = View.VISIBLE
+        }
+
+        buttonCancel.setOnClickListener {
+            buttonAdd.visibility = View.VISIBLE
+            buttonCancel.visibility = View.GONE
+            buttonDelete.visibility = View.GONE
+        }
+
     }
 
     private fun setupRecyclerView() {
