@@ -1,6 +1,7 @@
 package com.example.aston.presentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.aston.R
@@ -16,6 +17,7 @@ class ContactListAdapter : ListAdapter<Contact, ContactViewHolder>(ContactDiffCa
 
     var onContactLongClickListener: ((Contact) -> Unit)? = null
     var onContactClickListener: ((Contact) -> Unit)? = null
+    var onCheckBoxClickListener: ((Contact) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val layout = R.layout.item_contact
@@ -37,9 +39,14 @@ class ContactListAdapter : ListAdapter<Contact, ContactViewHolder>(ContactDiffCa
             onContactClickListener?.invoke(contact)
         }
 
+        viewHolder.checkBox.setOnClickListener {
+            onCheckBoxClickListener?.invoke(contact)
+        }
+
         viewHolder.tvFirstName.text = contact.firstName
         viewHolder.tvLastName.text = contact.lastName
         viewHolder.tvPhoneNumber.text = contact.phoneNumber
+        viewHolder.checkBox.visibility = View.VISIBLE
     }
 
     // Вернуть значение в зависимости от того, кокой item_view используется

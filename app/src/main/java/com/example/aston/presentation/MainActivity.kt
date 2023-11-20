@@ -1,7 +1,7 @@
 package com.example.aston.presentation
 
-import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var buttonChooseDelete: ImageButton
     private lateinit var buttonDelete: Button
     private lateinit var buttonCancel: Button
+
+    private val listToDelete = arrayListOf<Contact>()
 
     private var screenMode = CreateContactActivity.MODE_UNKNOWN
     private var shopItemId: Int = Contact.UNDEFINED_ID
@@ -60,6 +62,16 @@ class MainActivity : AppCompatActivity() {
             buttonDelete.visibility = View.GONE
         }
 
+        buttonDelete.setOnClickListener {
+            for (contact in listToDelete) {
+                viewModel.deleteContact(contact)
+            }
+            listToDelete.clear()
+
+            buttonAdd.visibility = View.VISIBLE
+            buttonCancel.visibility = View.GONE
+            buttonDelete.visibility = View.GONE
+        }
     }
 
     private fun setupRecyclerView() {
@@ -101,7 +113,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 // получить текущий список через метод currentList
                 val item = contactListAdapter.currentList[viewHolder.adapterPosition]
-                viewModel.deleteShopItem(item)
+                viewModel.deleteContact(item)
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)
@@ -112,6 +124,15 @@ class MainActivity : AppCompatActivity() {
         contactListAdapter.onContactClickListener = {
             val intent = CreateContactActivity.newIntentEditItem(this, it.id)
             startActivity(intent)
+        }
+
+        contactListAdapter.onCheckBoxClickListener = {
+            if (listToDelete.contains(it)) {
+                listToDelete.remove(it)
+            } else {
+                listToDelete.add(it)
+            }
+            Log.d("QWERTY", "${listToDelete.size}")
         }
     }
 

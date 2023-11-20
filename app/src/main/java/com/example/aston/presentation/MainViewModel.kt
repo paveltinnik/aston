@@ -11,14 +11,14 @@ class MainViewModel: ViewModel() {
 
     private val repository = ContactListRepositoryImpl
 
-    private val getShopListUseCase = GetContactListUseCase(repository)
-    private val deleteShopItemUseCase = DeleteContactUseCase(repository)
+    private val getContactListUseCase = GetContactListUseCase(repository)
+    private val deleteContactUseCase = DeleteContactUseCase(repository)
     private val editContactUseCase = EditContactUseCase(repository)
 
-    val shopList = getShopListUseCase.getShopList()
+    val shopList = getContactListUseCase.getShopList()
 
-    fun deleteShopItem(contact: Contact) {
-        deleteShopItemUseCase.deleteContact(contact)
+    fun deleteContact(contact: Contact) {
+        deleteContactUseCase.deleteContact(contact)
     }
 
 //    fun changeEnableState(contact: Contact) {
