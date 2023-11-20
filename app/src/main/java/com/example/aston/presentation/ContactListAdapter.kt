@@ -46,17 +46,19 @@ class ContactListAdapter : ListAdapter<Contact, ContactViewHolder>(ContactDiffCa
         viewHolder.tvFirstName.text = contact.firstName
         viewHolder.tvLastName.text = contact.lastName
         viewHolder.tvPhoneNumber.text = contact.phoneNumber
-        viewHolder.checkBox.visibility = View.VISIBLE
+        
+        if (contact.visible) {
+            viewHolder.checkBox.isChecked = false
+            viewHolder.checkBox.visibility = View.VISIBLE
+        } else {
+            viewHolder.checkBox.isChecked = false
+            viewHolder.checkBox.visibility = View.GONE
+        }
     }
 
     // Вернуть значение в зависимости от того, кокой item_view используется
-    override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
-        return 1
-//        return if (item.enabled) {
-//            VIEW_TYPE_ENABLED
-//        } else {
-//            VIEW_TYPE_DISABLED
-//        }
-    }
+//    override fun getItemViewType(position: Int): Int {
+//        val item = getItem(position)
+//        return 1
+//    }
 }

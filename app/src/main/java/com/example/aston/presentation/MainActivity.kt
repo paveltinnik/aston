@@ -25,52 +25,23 @@ class MainActivity : AppCompatActivity() {
 
     private val listToDelete = arrayListOf<Contact>()
 
-    private var screenMode = CreateContactActivity.MODE_UNKNOWN
-    private var shopItemId: Int = Contact.UNDEFINED_ID
+    private var isVisibleCheckBox = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setupRecyclerView()
-
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.shopList.observe(this) {
-            // обновить список из другого потока
-            contactListAdapter.submitList(it)
-        }
-
         buttonAdd = findViewById(R.id.button_add_contact)
         buttonChooseDelete = findViewById(R.id.button_choose_delete)
         buttonDelete = findViewById(R.id.button_delete)
         buttonCancel = findViewById(R.id.button_cancel)
+        
+        setupRecyclerView()
 
-        buttonAdd.setOnClickListener {
-            val intent = CreateContactActivity.newIntentAddItem(this)
-            startActivity(intent)
-        }
-
-        buttonChooseDelete.setOnClickListener {
-            buttonAdd.visibility = View.GONE
-            buttonCancel.visibility = View.VISIBLE
-            buttonDelete.visibility = View.VISIBLE
-        }
-
-        buttonCancel.setOnClickListener {
-            buttonAdd.visibility = View.VISIBLE
-            buttonCancel.visibility = View.GONE
-            buttonDelete.visibility = View.GONE
-        }
-
-        buttonDelete.setOnClickListener {
-            for (contact in listToDelete) {
-                viewModel.deleteContact(contact)
-            }
-            listToDelete.clear()
-
-            buttonAdd.visibility = View.VISIBLE
-            buttonCancel.visibility = View.GONE
-            buttonDelete.visibility = View.GONE
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.contactList.observe(this) {
+            // обновить список из другого потока
+            contactListAdapter.submitList(it)
         }
     }
 
@@ -91,7 +62,6 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        setupLongClickListener()
         setupClickListener()
         setupSwipeListener(rvShopList)
     }
@@ -134,18 +104,52 @@ class MainActivity : AppCompatActivity() {
             }
             Log.d("QWERTY", "${listToDelete.size}")
         }
-    }
 
-    private fun setupLongClickListener() {
-        contactListAdapter.onContactLongClickListener = {
-//            viewModel.changeEnableState(it)
+        buttonAdd.setOnClickListener {
+            val intent = CreateContactActivity.newIntentAddItem(this)
+            startActivity(intent)
+        }
+
+        buttonChooseDelete.setOnClickListener {
+            if (!isVisibleCheckBox) {
+                buttonAdd.visibility = View.GONE
+                buttonCancel.visibility = View.VISIBLE
+                buttonDelete.visibility = View.VISIBLE
+
+                isVisibleCheckBox = true
+                viewModel.changeVisibilityState()
+                listToDelete.clear()
+            }
+        }
+
+        buttonCancel.setOnClickListener {
+            if (isVisibleCheckBox) {
+                buttonAdd.visibility = View.VISIBLE
+                buttonCancel.visibility = View.GONE
+                buttonDelete.visibility = View.GONE
+
+                isVisibleCheckBox = false
+                viewModel.changeVisibilityState()
+                listToDelete.clear()
+            }
+        }
+
+        buttonDelete.setOnClickListener {
+            if (isVisibleCheckBox) {
+
+                for (contact in listToDelete) {
+                    viewModel.deleteContact(contact)
+                }
+                listToDelete.clear()
+
+                buttonAdd.visibility = View.VISIBLE
+                buttonCancel.visibility = View.GONE
+                buttonDelete.visibility = View.GONE
+
+                isVisibleCheckBox = false
+                viewModel.changeVisibilityState()
+                listToDelete.clear()
+            }
         }
     }
-}
-
-// Расширение для MutableList для обмена элементов
-fun <T> MutableList<T>.swap(from: Int, to: Int) {
-    val temp = this[from]
-    this[from] = this[to]
-    this[to] = temp
 }

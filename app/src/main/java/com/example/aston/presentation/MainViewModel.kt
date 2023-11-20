@@ -15,14 +15,16 @@ class MainViewModel: ViewModel() {
     private val deleteContactUseCase = DeleteContactUseCase(repository)
     private val editContactUseCase = EditContactUseCase(repository)
 
-    val shopList = getContactListUseCase.getShopList()
+    val contactList = getContactListUseCase.getContactList()
 
     fun deleteContact(contact: Contact) {
         deleteContactUseCase.deleteContact(contact)
     }
-
-//    fun changeEnableState(contact: Contact) {
-//        val newItem = contact.copy(enabled = !contact.enabled)
-//        editContactUseCase.editContact(newItem)
-//    }
+    
+    fun changeVisibilityState() {
+        for (contact in contactList.value!!) {
+            val newItem = contact.copy(visible = !contact.visible)
+            editContactUseCase.editContact(newItem)
+        }
+    }
 }
