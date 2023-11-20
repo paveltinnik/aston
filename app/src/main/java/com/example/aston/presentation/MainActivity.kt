@@ -102,7 +102,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 listToDelete.add(it)
             }
-            Log.d("QWERTY", "${listToDelete.size}")
         }
 
         buttonAdd.setOnClickListener {
