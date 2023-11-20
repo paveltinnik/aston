@@ -65,18 +65,16 @@ class ContactViewModel : ViewModel() {
     }
 
     private fun validateInput(firstName: String, lastName: String, phoneNumber: String): Boolean {
-        var result = true
-        
         if (firstName.isBlank()) {
-            result = false
+            return false
         }
         if (lastName.isBlank()) {
-            result = false
+            return false
         }
         if (phoneNumber.isBlank()) {
-            result = false
+            return false
         }
-        return result
+        return true
     }
 
     private fun finishWork() {
