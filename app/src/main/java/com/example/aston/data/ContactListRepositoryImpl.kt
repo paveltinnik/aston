@@ -1,5 +1,6 @@
 package com.example.aston.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.aston.domain.Contact
@@ -16,7 +17,7 @@ object ContactListRepositoryImpl : ContactListRepository {
     init {
         val faker = Faker()
         
-        for (i in 0 until 5) {
+        for (i in 0 until 100) {
             val firstName = faker.name.firstName()
             val lastName = faker.name.lastName()
             val phoneNumber = faker.phoneNumber.phoneNumber()
@@ -54,7 +55,7 @@ object ContactListRepositoryImpl : ContactListRepository {
     override fun getContactList(): LiveData<List<Contact>> {
         return contactListLD
     }
-
+    
     private fun updateList() {
         contactListLD.value = contactList.toList()
     }

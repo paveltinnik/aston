@@ -1,6 +1,7 @@
 package com.example.aston.presentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.aston.R
@@ -16,6 +17,7 @@ class ContactListAdapter : ListAdapter<Contact, ContactViewHolder>(ContactDiffCa
 
     var onContactLongClickListener: ((Contact) -> Unit)? = null
     var onContactClickListener: ((Contact) -> Unit)? = null
+    var onCheckBoxClickListener: ((Contact) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val layout = R.layout.item_contact
@@ -37,19 +39,26 @@ class ContactListAdapter : ListAdapter<Contact, ContactViewHolder>(ContactDiffCa
             onContactClickListener?.invoke(contact)
         }
 
+        viewHolder.checkBox.setOnClickListener {
+            onCheckBoxClickListener?.invoke(contact)
+        }
+
         viewHolder.tvFirstName.text = contact.firstName
         viewHolder.tvLastName.text = contact.lastName
         viewHolder.tvPhoneNumber.text = contact.phoneNumber
+        
+        if (contact.visible) {
+            viewHolder.checkBox.isChecked = false
+            viewHolder.checkBox.visibility = View.VISIBLE
+        } else {
+            viewHolder.checkBox.isChecked = false
+            viewHolder.checkBox.visibility = View.GONE
+        }
     }
 
     // Вернуть значение в зависимости от того, кокой item_view используется
-    override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
-        return 1
-//        return if (item.enabled) {
-//            VIEW_TYPE_ENABLED
-//        } else {
-//            VIEW_TYPE_DISABLED
-//        }
-    }
+//    override fun getItemViewType(position: Int): Int {
+//        val item = getItem(position)
+//        return 1
+//    }
 }
