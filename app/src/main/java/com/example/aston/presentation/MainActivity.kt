@@ -1,9 +1,8 @@
 package com.example.aston.presentation
 
 import android.os.Bundle
-import android.widget.Toast
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -31,8 +30,10 @@ class MainActivity : AppCompatActivity() {
             contactListAdapter.submitList(it)
         }
 
-        val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
-        
+        val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_contact)
+        val buttonDelete = findViewById<Button>(R.id.button_delete)
+        val buttonCancel = findViewById<Button>(R.id.button_cancel)
+
         buttonAddItem.setOnClickListener {
             val intent = CreateContactActivity.newIntentAddItem(this)
             startActivity(intent)
