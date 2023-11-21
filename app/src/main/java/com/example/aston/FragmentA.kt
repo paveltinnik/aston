@@ -25,8 +25,8 @@ class FragmentA : Fragment() {
 
         buttonToFragmentB.setOnClickListener {
             parentFragmentManager.beginTransaction()
+                .addToBackStack("FragmentA")
                 .replace(R.id.fragment_container_view, FragmentB())
-                .addToBackStack("FragmentB")
                 .commit()
         }
     }

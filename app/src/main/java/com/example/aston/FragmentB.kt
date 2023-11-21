@@ -27,17 +27,13 @@ class FragmentB : Fragment() {
 
         buttonToFragmentC.setOnClickListener {
             parentFragmentManager.beginTransaction()
+                .addToBackStack("FragmentB")
                 .replace(R.id.fragment_container_view, FragmentC())
-                .addToBackStack("FragmentC")
                 .commit()
         }
 
         buttonBack.setOnClickListener {
-            val p = parentFragmentManager.findFragmentByTag("FragmentB")
-
-            parentFragmentManager.beginTransaction()
-                .remove(p!!)
-                .commit()
+            parentFragmentManager.popBackStack()
         }
     }
 
