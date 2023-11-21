@@ -1,0 +1,15 @@
+package com.example.aston.domain
+
+import androidx.lifecycle.LiveData
+
+interface ContacItemtListRepository {
+    fun addContactItem(contactItem: ContactItem)
+
+    fun deleteContact(contact: Contact)
+
+    fun editContact(contact: Contact)
+
+    fun getContact(contactId: Int) : Contact
+
+    fun getContactList():LiveData<List<Contact>>
+}
