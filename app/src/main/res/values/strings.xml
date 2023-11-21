@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">aston</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="to_fragment_b">To Fragment B</string>
+    <string name="to_fragment_c">To Fragment C</string>
+    <string name="back">Back</string>
+    <string name="to_fragment_d">To Fragment D</string>
+    <string name="to_fragment_a">To Fragment A</string>
+    <string name="fragment_c">Fragment C</string>
+    <string name="fragment_b">Fragment B</string>
+    <string name="fragment_a">Fragment A</string>
 </resources>
