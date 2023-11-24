@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_from_frgment_b"
+        android:id="@+id/tv_from_fragment_b"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginBottom="15dp"
@@ -38,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="@id/button_to_fragment_a"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_from_frgment_b" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_from_fragment_b" />
 
     <Button
         android:id="@+id/button_to_fragment_a"

@@ -25,9 +25,16 @@ class FragmentA : Fragment() {
 
         buttonToFragmentB.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .addToBackStack("FragmentA")
-                .replace(R.id.fragment_container_view, FragmentB())
+                .replace(R.id.fragment_container_view, FragmentB(), FragmentB.TAG)
+                .addToBackStack(BACK_STACK_NAME)
+                .setReorderingAllowed(true)
                 .commit()
         }
+    }
+
+    companion object {
+
+        const val BACK_STACK_NAME = "From A To B"
+        const val TAG = "FragmentA"
     }
 }

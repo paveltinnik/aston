@@ -1,31 +1,28 @@
 package com.example.aston
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_TEXT = "text"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FragmentC.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FragmentC : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var textFromFragmentB: String? = null
+
+    private lateinit var tvFromFragmentB: TextView
+    private lateinit var buttonToFragmentD: Button
+    private lateinit var buttonToFragmentA: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            textFromFragmentB = it.getString(ARG_TEXT)
         }
     }
 
@@ -33,26 +30,40 @@ class FragmentC : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_c, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        tvFromFragmentB = view.findViewById(R.id.tv_from_fragment_b)
+        buttonToFragmentD = view.findViewById(R.id.button_to_fragment_d)
+        buttonToFragmentA = view.findViewById(R.id.button_to_fragment_a)
+
+        tvFromFragmentB.text = textFromFragmentB
+
+        buttonToFragmentD.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, FragmentD(), FragmentD.TAG)
+                .addToBackStack(BACK_STACK_NAME)
+                .commit()
+        }
+
+        buttonToFragmentA.setOnClickListener {
+            parentFragmentManager.popBackStack(FragmentA.BACK_STACK_NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentC.
-         */
-        // TODO: Rename and change types and number of parameters
+
+        const val BACK_STACK_NAME = "From C To D"
+        const val TAG = "FragmentC"
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(text: String) =
             FragmentC().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_TEXT, text)
                 }
             }
     }
