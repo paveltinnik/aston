@@ -30,7 +30,7 @@ class ContactViewModel : ViewModel() {
         _contact.value = item
     }
 
-    fun addContact(inputFirstName: String?,inputLastName: String?, inputPhoneNumber: String?) {
+    fun addContact(inputFirstName: String?, inputLastName: String?, inputPhoneNumber: String?) {
         val firstName = parseString(inputFirstName)
         val lastName = parseString(inputLastName)
         val phoneNumber = parseString(inputPhoneNumber)
@@ -38,7 +38,7 @@ class ContactViewModel : ViewModel() {
         val fieldsValid = validateInput(firstName, lastName, phoneNumber)
 
         if (fieldsValid) {
-            val contact = Contact(firstName, lastName, phoneNumber)
+            val contact = Contact(firstName = firstName, lastName = lastName, phoneNumber = phoneNumber)
             addContactUseCase.addContact(contact)
             finishWork()
         }
