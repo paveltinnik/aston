@@ -20,13 +20,6 @@ class ContactListFragment : Fragment() {
     private lateinit var contactListAdapter: ContactListAdapter
 
     private lateinit var buttonAdd: FloatingActionButton
-    private lateinit var buttonChooseDelete: ImageButton
-    private lateinit var buttonDelete: Button
-    private lateinit var buttonCancel: Button
-
-    private val listToDelete = arrayListOf<Contact>()
-
-    private var isVisibleCheckBox = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,9 +33,6 @@ class ContactListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         buttonAdd = view.findViewById(R.id.button_add_contact)
-        buttonChooseDelete = view.findViewById(R.id.button_choose_delete)
-        buttonDelete = view.findViewById(R.id.button_delete)
-        buttonCancel = view.findViewById(R.id.button_cancel)
 
         setupRecyclerView(view)
 
@@ -71,31 +61,6 @@ class ContactListFragment : Fragment() {
         }
 
         setupClickListener()
-        setupSwipeListener(rvShopList)
-    }
-
-    // Метод для свайпа
-    private fun setupSwipeListener(rvShopList: RecyclerView?) {
-        val callback = object : ItemTouchHelper.SimpleCallback(
-            0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // получить текущий список через метод currentList
-                val item = contactListAdapter.currentList[viewHolder.adapterPosition]
-                viewModel.deleteContact(item)
-            }
-        }
-        val itemTouchHelper = ItemTouchHelper(callback)
-        itemTouchHelper.attachToRecyclerView(rvShopList)
     }
 
     private fun setupClickListener() {
@@ -108,14 +73,6 @@ class ContactListFragment : Fragment() {
                 .commit()
         }
 
-        contactListAdapter.onCheckBoxClickListener = {
-            if (listToDelete.contains(it)) {
-                listToDelete.remove(it)
-            } else {
-                listToDelete.add(it)
-            }
-        }
-
         buttonAdd.setOnClickListener {
             val fragment = ContactFragment.newInstanceAddContact()
 
@@ -125,48 +82,5 @@ class ContactListFragment : Fragment() {
                 .commit()
         }
 
-        buttonChooseDelete.setOnClickListener {
-            if (!isVisibleCheckBox) {
-                buttonAdd.visibility = View.GONE
-                buttonCancel.visibility = View.VISIBLE
-                buttonDelete.visibility = View.VISIBLE
-
-                isVisibleCheckBox = true
-                viewModel.changeVisibilityState()
-                listToDelete.clear()
-            }
-        }
-
-        buttonCancel.setOnClickListener {
-            if (isVisibleCheckBox) {
-                enableDeletingView()
-
-                isVisibleCheckBox = false
-                viewModel.changeVisibilityState()
-                listToDelete.clear()
-            }
-        }
-
-        buttonDelete.setOnClickListener {
-            if (isVisibleCheckBox) {
-
-                for (contact in listToDelete) {
-                    viewModel.deleteContact(contact)
-                }
-                listToDelete.clear()
-
-                enableDeletingView()
-
-                isVisibleCheckBox = false
-                viewModel.changeVisibilityState()
-                listToDelete.clear()
-            }
-        }
-    }
-
-    private fun enableDeletingView() {
-        buttonAdd.visibility = View.VISIBLE
-        buttonCancel.visibility = View.GONE
-        buttonDelete.visibility = View.GONE
     }
 }

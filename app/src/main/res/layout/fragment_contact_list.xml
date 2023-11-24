@@ -20,15 +20,6 @@
             android:text="@string/contacts"
             android:textSize="20sp" />
 
-        <ImageButton
-            android:id="@+id/button_choose_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:contentDescription="@string/delete"
-            android:src="@drawable/ic_delete" />
-
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
