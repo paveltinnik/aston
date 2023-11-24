@@ -46,4 +46,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("io.github.serpro69:kotlin-faker:1.15.0")
+    implementation ("com.squareup.picasso:picasso:2.8")
 }

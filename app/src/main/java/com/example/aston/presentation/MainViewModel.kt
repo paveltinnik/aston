@@ -20,11 +20,4 @@ class MainViewModel: ViewModel() {
     fun deleteContact(contact: Contact) {
         deleteContactUseCase.deleteContact(contact)
     }
-
-    fun changeVisibilityState() {
-        for (contact in contactList.value!!) {
-            val newItem = contact.copy(visible = !contact.visible)
-            editContactUseCase.editContact(newItem)
-        }
-    }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.aston.domain.Contact
 import com.example.aston.domain.ContactListRepository
+import com.squareup.picasso.Picasso
 import io.github.serpro69.kfaker.Faker
 
 object ContactListRepositoryImpl : ContactListRepository {
@@ -15,8 +16,10 @@ object ContactListRepositoryImpl : ContactListRepository {
 
     init {
         val faker = Faker()
+        Picasso.get().load("https://loremflickr.com/640/360").get()
 
         for (i in 0 until 100) {
+
             val firstName = faker.name.firstName()
             val lastName = faker.name.lastName()
             val phoneNumber = faker.phoneNumber.phoneNumber()
