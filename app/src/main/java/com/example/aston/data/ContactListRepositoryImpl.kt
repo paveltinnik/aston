@@ -28,7 +28,6 @@ object ContactListRepositoryImpl : ContactListRepository {
 
     override fun addContact(contact: Contact) {
         if (contact.id == Contact.UNDEFINED_ID) {
-
             contact.id = autoIncrementId++
         }
         contactList.add(contact)

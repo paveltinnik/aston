@@ -38,7 +38,9 @@ class ContactListAdapter : ListAdapter<Contact, ContactViewHolder>(ContactDiffCa
             onContactClickListener?.invoke(contact)
         }
 
-//        viewHolder.ivContactPhoto.setImageBitmap(contact.photo)
+        if (contact.photo != null) {
+            viewHolder.ivContactPhoto.setImageBitmap(contact.photo)
+        }
         viewHolder.tvFirstName.text = contact.firstName
         viewHolder.tvLastName.text = contact.lastName
         viewHolder.tvPhoneNumber.text = contact.phoneNumber

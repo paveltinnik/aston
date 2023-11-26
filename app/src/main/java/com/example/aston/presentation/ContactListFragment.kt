@@ -1,6 +1,8 @@
 package com.example.aston.presentation
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +27,6 @@ class ContactListFragment : Fragment() {
 
     private val repository = ContactListRepositoryImpl
 
-    private val getContactUseCase = GetContactUseCase(repository)
     private val addContactUseCase = AddContactUseCase(repository)
     private val editContactUseCase = EditContactUseCase(repository)
 
@@ -50,6 +51,7 @@ class ContactListFragment : Fragment() {
         setupRecyclerView(view)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
         viewModel.contactList.observe(viewLifecycleOwner) {
             // обновить список из другого потока
             contactListAdapter.submitList(it)
@@ -85,26 +87,27 @@ class ContactListFragment : Fragment() {
             ) { _, bundle ->
                 val resultArray = bundle.getStringArrayList(ContactFragment.CONTACT_RESULT)
 
-                val firstName = resultArray?.get(0) ?: "UNKNOWN"
-                val lastName = resultArray?.get(1) ?: "UNKNOWN"
-                val phone = resultArray?.get(2) ?: "777"
+                val contactPhoto: Bitmap? = bundle.getParcelable(ContactFragment.CONTACT_PHOTO)
+                val firstName = resultArray?.get(0) ?: ""
+                val lastName = resultArray?.get(1) ?: ""
+                val phone = resultArray?.get(2) ?: ""
 
-                val contact = it.copy(firstName = firstName, lastName = lastName, phoneNumber = phone)
+                val contact = it.copy(photo = contactPhoto, firstName = firstName, lastName = lastName, phoneNumber = phone)
                 editContactUseCase.editContact(contact)
-                contactListAdapter.notifyDataSetChanged()
+//                contactListAdapter.notifyDataSetChanged()
+                contactListAdapter.notifyItemChanged(contact.id)
                 childFragmentManager.clearFragmentResultListener(ContactFragment.CONTACT_RESULT)
             }
 
             setFragmentResult(ContactFragment.CONTACT_DATA, Bundle().apply {
                 val contactData = arrayListOf(it.firstName, it.lastName, it.phoneNumber)
                 putStringArrayList(ContactFragment.CONTACT_DATA, contactData)
+
+                val contactPhoto = it.photo
+                putParcelable(ContactFragment.CONTACT_PHOTO, contactPhoto)
             })
 
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, ContactFragment())
-                .addToBackStack(null)
-                .commit()
-
+            openContactFragment()
         }
 
         buttonAdd.setOnClickListener {
@@ -125,13 +128,14 @@ class ContactListFragment : Fragment() {
                 childFragmentManager.clearFragmentResultListener(ContactFragment.CONTACT_RESULT)
             }
 
-//            val fragment = ContactFragment.newInstanceAddContact()
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, ContactFragment())
-                .addToBackStack(null)
-                .commit()
+            openContactFragment()
         }
+    }
 
+    private fun openContactFragment() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_view, ContactFragment())
+            .addToBackStack(null)
+            .commit()
     }
 }
