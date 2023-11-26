@@ -94,8 +94,7 @@ class ContactListFragment : Fragment() {
 
                 val contact = it.copy(photo = contactPhoto, firstName = firstName, lastName = lastName, phoneNumber = phone)
                 editContactUseCase.editContact(contact)
-//                contactListAdapter.notifyDataSetChanged()
-                contactListAdapter.notifyItemChanged(contact.id)
+                contactListAdapter.notifyDataSetChanged()
                 childFragmentManager.clearFragmentResultListener(ContactFragment.CONTACT_RESULT)
             }
 
