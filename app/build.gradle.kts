@@ -47,4 +47,5 @@ dependencies {
 
     implementation("io.github.serpro69:kotlin-faker:1.15.0")
     implementation ("com.squareup.picasso:picasso:2.8")
+    implementation ("androidx.fragment:fragment-ktx:1.6.2")
 }

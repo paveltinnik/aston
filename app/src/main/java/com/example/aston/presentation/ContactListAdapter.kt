@@ -26,7 +26,7 @@ class ContactListAdapter : ListAdapter<Contact, ContactViewHolder>(ContactDiffCa
 
     // Установить во viewHolder значения
     override fun onBindViewHolder(viewHolder: ContactViewHolder, position: Int) {
-        // получить shopItem по позиции
+        // получить contact по позиции
         val contact = getItem(position)
 
         viewHolder.view.setOnLongClickListener {

@@ -1,7 +1,5 @@
 package com.example.aston.presentation
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import com.example.aston.R
 import com.example.aston.domain.Contact
@@ -27,7 +26,7 @@ class ContactFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        parseParams()
+//        parseParams()
     }
 
     override fun onCreateView(
@@ -42,8 +41,10 @@ class ContactFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[ContactViewModel::class.java]
         initViews(view)
-        launchRightMode()
-        observeViewModel()
+//        launchRightMode()
+//        observeViewModel()
+
+        launch()
     }
 
     private fun parseParams() {
@@ -74,47 +75,55 @@ class ContactFragment : Fragment() {
         buttonSave = view.findViewById(R.id.buttonSave)
     }
 
-    private fun launchRightMode() {
-        when (screenMode) {
-            MODE_EDIT -> launchEditMode()
-            MODE_ADD -> launchAddMode()
-        }
-    }
+    private fun launch() {
+        setFragmentResultListener("contactData") { _, bundle ->
+            val contactData = bundle.getStringArrayList("contactData")
 
-    private fun launchEditMode() {
-        viewModel.getContact(contactId)
-
-        viewModel.contact.observe(viewLifecycleOwner) {
-            editTextFirstName.setText(it.firstName)
-            editTextLastName.setText(it.lastName)
-            editTextPhoneNumber.setText(it.phoneNumber)
+            editTextFirstName.setText(contactData?.get(0) ?: "")
+            editTextLastName.setText(contactData?.get(1) ?: "")
+            editTextPhoneNumber.setText(contactData?.get(2) ?: "")
         }
 
         buttonSave.setOnClickListener {
-            viewModel.editContact(
-                editTextFirstName.text?.toString(),
-                editTextLastName.text?.toString(),
-                editTextPhoneNumber.text?.toString()
-            )
-        }
+            val firstName = editTextFirstName.text?.toString()
+            val lastName = editTextLastName.text?.toString()
+            val phoneNumber = editTextPhoneNumber.text?.toString()
 
+            if (validateInput(firstName!!, lastName!!, phoneNumber!!)) {
+                val contactArray = arrayListOf(
+                    firstName,
+                    lastName,
+                    phoneNumber
+                )
+
+                parentFragmentManager.setFragmentResult(CONTACT_RESULT, Bundle().apply {
+                    putStringArrayList(CONTACT_RESULT, contactArray)
+                })
+
+                parentFragmentManager.popBackStack()
+            }
+        }
     }
 
-    private fun launchAddMode() {
-        buttonSave.setOnClickListener {
-            viewModel.addContact(
-                editTextFirstName.text?.toString(),
-                editTextLastName.text?.toString(),
-                editTextPhoneNumber.text?.toString()
-            )
+    private fun validateInput(firstName: String, lastName: String, phoneNumber: String): Boolean {
+        if (firstName.isBlank()) {
+            return false
         }
+        if (lastName.isBlank()) {
+            return false
+        }
+        if (phoneNumber.isBlank()) {
+            return false
+        }
+        return true
     }
 
-    private fun observeViewModel() {
+
+//    private fun observeViewModel() {
 //        viewModel.shouldCloseScreen.observe(this) {
 //            finish()
 //        }
-    }
+//    }
 
     companion object {
         const val SCREEN_MODE = "extra_mode"
@@ -122,6 +131,10 @@ class ContactFragment : Fragment() {
         const val MODE_ADD = "mode_add"
         const val MODE_EDIT = "mode_edit"
         const val MODE_UNKNOWN = ""
+
+        const val CONTACT_DATA = "contactData"
+        const val CONTACT_RESULT = "contactResult"
+
 
         fun newInstanceAddContact(): ContactFragment {
             val args = Bundle().apply {
